@@ -179,7 +179,7 @@ class InputBox(pygame.sprite.Sprite, InterfaceElement):
 		self.surface.blit(self.text_box, (self.x + 7.5, self.y + 4))
 
 
-def UpdateElements(events, pressed_keys, mouse_pos, elements:list = [], inputs:list = [], texts:list = []):
+def ProcessElements(events, pressed_keys, mouse_pos, elements:list = [], inputs:list = [], texts:list = []):
 	for element_ in elements:
 		element_.clicked = False
 		if ElementCollide(element_, mouse_pos):
@@ -208,6 +208,9 @@ def UpdateElements(events, pressed_keys, mouse_pos, elements:list = [], inputs:l
 							input_box.remove()
 					else: 
 						input_box.add(event.unicode)
+
+
+def UpdateElements(elements:list = [], inputs:list = [], texts:list = []):
 	for element_ in elements:
 		element_.update()
 	for input_ in inputs:

@@ -3,7 +3,7 @@ import defaults
 import json
 import tkinter as tk
 from tkinter import filedialog
-from ui_elements import TextButton, InputBox, Text, UpdateElements
+from ui_elements import TextButton, InputBox, Text, ProcessElements, UpdateElements
 
 pygame.init()
 tk.Tk().withdraw()
@@ -60,12 +60,10 @@ mouse_status = 0
 open_button = TextButton(surface, x=650, y=40, width=100, height=24, text="Open Map", font_size=12, func=open_func)
 clear_button = TextButton(surface, x=650, y=70, width=100, height=24, text="Clear Map", font_size=12, func=clear_tiles)
 save_button = TextButton(surface, x=650, y=140, width=100, height=24, text="Save Map", font_size=12, func=save_func)
-name_input = InputBox(surface, x=650, y=170, width=100, height=24)
-informing_text = Text(surface, x=700, y=204, text="File Name", font_size=12, color=(255, 255, 255))
-informing_text.center()
+name_input = InputBox(surface, x=650, y=170, width=100, height=24, default_text="File name...")
 BUTTONS = [clear_button, save_button, open_button]
 INPUT_BOXES = [name_input, ]
-TEXTS = [informing_text, ]
+TEXTS = []
 
 
 
@@ -123,8 +121,8 @@ while main:
             pos[1] += defaults.TILE_WIDTH
         pos[1] = 0
 
-    UpdateElements(EVENTS, PRESSED_KEYS, mouse_pos, BUTTONS, INPUT_BOXES, TEXTS)
-
+    ProcessElements(EVENTS, PRESSED_KEYS, mouse_pos, BUTTONS, INPUT_BOXES, TEXTS)
+    UpdateElements(BUTTONS, INPUT_BOXES, TEXTS)
     pygame.display.update()
 
 pygame.quit()
