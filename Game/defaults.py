@@ -13,6 +13,11 @@ ACTIVE_COLOR = (255, 120, 120)
 OBSTACLE_COLOR = (0, 120, 255)
 INACTIVE_COLOR = (160, 160, 160)
 
+BERRY_COLOR = (0, 0, 0)
+SUPER_BERRY_COLOR = (204, 0, 255)
+ENEMY_COLOR = (0, 0, 0)
+PACMAN_COLOR = (255, 255, 0)
+
 CURSOR = pygame.cursors.tri_left
 
 PACMAN_IMAGE = None
@@ -20,4 +25,4 @@ ENEMY_IMAGE = None
 BLANK_WHITE_IMAGE = pygame.image.load("data/white.jpg")
 BLANK_BLACK_IMAGE = pygame.image.load("data/black.jpg")
 
-BLACK_HIGHLIGHT_COLOR = (0,0,0,60)
+BLACK_HIGHLIGHT_COLOR = (0, 0, 0, 60)

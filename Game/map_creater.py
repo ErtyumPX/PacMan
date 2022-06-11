@@ -27,17 +27,14 @@ def clear_tiles():
     for _ in range(H_TILES):
         column = [2 for _ in range(V_TILES)]
         TILES.append(column)
-    global SUPER_BERRIES, main_pacman_position
-    for super_berry in SUPER_BERRIES:
-        del super_berry
-    SUPER_BERRIES = []
-    main_pacman_position = [-1, -1]
+    global main_pacman_position
+    main_pacman_position = None
     print("Cleared")
 
 
 def save_func():
     try:
-        with open(maps_path.format(name_input.text), "w") as json_file:
+        with open(maps_path.format(name_input.text.replace(" ", "_")), "w") as json_file:
             json.dump(TILES, json_file)
             print("Saved")
     except Exception as exp:
@@ -56,14 +53,12 @@ def open_func():
     except Exception as exp:
         print(exp)
 
-SUPER_BERRIES = []
-main_pacman_position = [-1, -1]
+main_pacman_position = None
 
 clear_tiles()
 
 tile_change_status = None
 
-#button_image = pygame.transform.scale(pygame.image.load("data/white.jpg"), (60,20))
 open_button = TextButton(surface, x=650, y=40, width=100, height=24, text="Open Map", font_size=12, func=open_func)
 clear_button = TextButton(surface, x=650, y=70, width=100, height=24, text="Clear Map", font_size=12, func=clear_tiles)
 save_button = TextButton(surface, x=650, y=140, width=100, height=24, text="Save Map", font_size=12, func=save_func)
@@ -106,18 +101,30 @@ while main:
                 tile_position = [mouse_tile_x * TILE_WIDTH + TILE_WIDTH/2, mouse_tile_y * TILE_WIDTH + TILE_WIDTH/2]
 
                 if event.key == pygame.K_SPACE:
-                    if main_pacman_position == tile_position:
-                        main_pacman_position = [-1, -1]
-                    else:
+                    if main_pacman_position == None:
                         TILES[mouse_tile_x][mouse_tile_y] = 0
-                        main_pacman_position = tile_position 
+                        main_pacman_position = [mouse_tile_x, mouse_tile_y]
+
+                    elif mouse_tile_x == main_pacman_position[0] and mouse_tile_y == main_pacman_position[1]:
+                        TILES[mouse_tile_x][mouse_tile_y] = 1
+                        main_pacman_position = None
+
+                    else:
+                        TILES[main_pacman_position[0]][main_pacman_position[1]] = 1
+                        TILES[mouse_tile_x][mouse_tile_y] = 0
+                        main_pacman_position = [mouse_tile_x, mouse_tile_y]
                 
                 elif event.key == pygame.K_f:
-                    if tile_position in SUPER_BERRIES:
-                        SUPER_BERRIES.remove(tile_position)
+                    if TILES[mouse_tile_x][mouse_tile_y] == -1:
+                        TILES[mouse_tile_x][mouse_tile_y] = 1
                     else:
-                        SUPER_BERRIES.append(tile_position)
                         TILES[mouse_tile_x][mouse_tile_y] = -1
+
+                elif event.key == pygame.K_e:
+                    if TILES[mouse_tile_x][mouse_tile_y] == -2:
+                        TILES[mouse_tile_x][mouse_tile_y] = 1
+                    else:
+                        TILES[mouse_tile_x][mouse_tile_y] = -2
 
         elif event.type == pygame.KEYUP:
             tile_change_status = None
@@ -138,10 +145,20 @@ while main:
         for y in range(defaults.V_TILES):
             tile = TILES[x][y]
             color = (0, 0, 0)
-            if tile == 1 or tile == 0 or tile == -1: color = defaults.ACTIVE_COLOR
+            if tile == 1 or tile == 0 or tile == -1 or tile == -2: color = defaults.ACTIVE_COLOR
             elif tile == 2: color = defaults.OBSTACLE_COLOR
             elif tile == 3: color = defaults.INACTIVE_COLOR
             pygame.draw.rect(surface, color, pos)
+
+            pos_middle = [pos[0] + defaults.TILE_WIDTH / 2, pos[1] + defaults.TILE_WIDTH / 2]
+            if tile == -1:
+                pygame.draw.circle(surface, 0, pos_middle, 6)
+                pygame.draw.circle(surface, defaults.SUPER_BERRY_COLOR, pos_middle, 5)
+            elif tile == -2:
+                pygame.draw.circle(surface, defaults.ENEMY_COLOR, pos_middle, 7)
+            elif tile == 0:
+                pygame.draw.circle(surface, (255, 255, 0), pos_middle, 7)
+
             pos[1] += defaults.TILE_WIDTH
         pos[1] = 0
 
@@ -155,9 +172,7 @@ while main:
 
     ProcessElements(EVENTS, PRESSED_KEYS, mouse_pos, BUTTONS, INPUT_BOXES, TEXTS)
     UpdateElements(BUTTONS, INPUT_BOXES, TEXTS)
-    for berry_position in SUPER_BERRIES:
-        pygame.draw.circle(surface, (0, 0, 0), berry_position, 5)
-    pygame.draw.circle(surface, (255, 255, 0), main_pacman_position, 7)
+
     pygame.display.update()
 
 pygame.quit()

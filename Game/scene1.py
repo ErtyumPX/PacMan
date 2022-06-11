@@ -5,11 +5,12 @@ import pygame, defaults, json
 from pacman import Pacman
 from enemy import Enemy
 from berry import Berry
+from super_berry import SuperBerry
 from random import randint
 from math import floor, ceil
 
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
-path = "maps/main_map"
+path = "maps/rectangle"
 
 with open(path) as file:
     data = json.load(file)
@@ -22,27 +23,37 @@ class Scene1(Scene):
         super().__init__(main_surface)
         self.surface = main_surface
         self.render_manager = RenderManager(main_surface)
-
-        self.pacman = Pacman(main_surface, x=14, y=13)
-        self.life = 3
-
-        self.enemy1 = Enemy(main_surface, x=4, y=2, vel=randint(1, 4))
-        self.enemy2 = Enemy(main_surface, x=25, y=2, vel=randint(1, 4))
-        self.enemy3 = Enemy(main_surface, x=4, y=23, vel=randint(1, 4))
-        self.enemy4 = Enemy(main_surface, x=25, y=23, vel=randint(1, 4))
-        self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
-        self.render_manager.add(self.pacman, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
-
+           
+        self.enemies = []
         self.collected_berry = 0
         self.berries = []
-        self.MOVABLE_TILES = 0
+        self.super_berries = []
+        self.berry_amount = 0
         for x in range(defaults.H_TILES):
             for y in range(defaults.V_TILES):
+
                 if TILES[x][y] == 1:
-                    self.MOVABLE_TILES += 1
+                    self.berry_amount += 1
                     new_berry = Berry(main_surface, x=x, y=y)
                     self.render_manager.add(new_berry)
                     self.berries.append(new_berry)
+
+                elif TILES[x][y] == -1:
+                    self.berry_amount += 1
+                    new_super_berry = SuperBerry(main_surface, x=x, y=y)
+                    self.render_manager.add(new_super_berry)
+                    self.super_berries.append(new_super_berry)
+                    TILES[x][y] = 1
+
+                elif TILES[x][y] == -2:
+                    new_enemy = Enemy(main_surface, x=x, y=y, vel=randint(1, 4))
+                    self.enemies.append(new_enemy)
+                    self.render_manager.add(new_enemy)
+
+                elif TILES[x][y] == 0:
+                    self.pacman = Pacman(main_surface, x=x, y=y)
+                    TILES[x][y] = 1
+                    self.render_manager.add(self.pacman)
 
         HorizontalSlidingIn(self, 40)
 
@@ -60,10 +71,11 @@ class Scene1(Scene):
         for enemy in self.enemies:
             if floor(self.pacman.transform.x) == floor(enemy.transform.x) and \
                     floor(self.pacman.transform.y) == floor(enemy.transform.y):
-                self.life -= 1
-                if self.life > 0:
+                self.pacman.life -= 1
+                print(self.pacman.life)
+                if self.pacman.life > 0:
                     self.render_manager.remove(self.pacman)
-                    self.pacman = Pacman(self.surface, x=14, y=13)
+                    self.pacman = Pacman(self.surface, x=14, y=13, life=self.pacman.life)
                     self.render_manager.add(self.pacman)
                 else:
                     print("You Died!")
@@ -80,7 +92,7 @@ class Scene1(Scene):
                     berry.is_taken = True
 
     def check_if_won(self):
-        if self.MOVABLE_TILES == self.collected_berry:
+        if self.berry_amount == self.collected_berry:
             print("You Won!")
 
     def update(self):

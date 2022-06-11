@@ -6,13 +6,14 @@ from math import floor
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
 
 class Pacman(pygame.sprite.Sprite):
-    def __init__(self, surface, x=0, y=0):
+    def __init__(self, surface, x=0, y=0, life=3):
         pygame.sprite.Sprite.__init__(self)
         self.surface = surface
         self.transform = Transform(x=x, y=y)
         self.velocity = 0  # 0:stand, 1:up, 2:right, 3:down, 4:left
         self.image = defaults.PACMAN_IMAGE
 
+        self.life = life
         self.moving_speed = 8
         self.is_moving = False
 

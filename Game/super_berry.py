@@ -2,7 +2,7 @@ import pygame, defaults
 from transform import Transform
 
 
-class Berry(pygame.sprite.Sprite):
+class SuperBerry(pygame.sprite.Sprite):
     def __init__(self, surface, x:int = 0, y:int = 0):
         pygame.sprite.Sprite.__init__(self)
         self.surface = surface
@@ -13,5 +13,6 @@ class Berry(pygame.sprite.Sprite):
         if not self.is_taken:
             x = int(self.transform.x * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
             y = int(self.transform.y * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
-            r = 2
-            pygame.draw.circle(self.surface, defaults.BERRY_COLOR, (x, y), r)
+            r = 5
+            pygame.draw.circle(self.surface, 0, (x, y), r + 1)
+            pygame.draw.circle(self.surface, defaults.SUPER_BERRY_COLOR, (x, y), r)

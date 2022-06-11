@@ -143,7 +143,7 @@ class Text(pygame.sprite.Sprite, InterfaceElement):
 			self.surface.blit(self.text_box, (self.x, self.y))
 
 
-valid = r'[^\.A-Za-z0-9 ]'
+valid = r'[^\.A-Za-z0-9 _]'
 class InputBox(pygame.sprite.Sprite, InterfaceElement):
 	def __init__(self, surface, x:int = 0, y:int = 0, width:int = 50, height:int = 20, font_size = 50, color=(0, 0, 0), default_text='', image=BLANK_WHITE_IMAGE, status:int = 0):
 		pygame.sprite.Sprite.__init__(self)
