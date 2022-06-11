@@ -99,3 +99,10 @@ def HorizontalSlidingOut(scene:Scene, speed:int):
         pygame.display.flip()
         pygame.time.wait(10)
     pygame.event.clear()
+
+def CirclerOut(scene:Scene , speed:int):
+    return
+
+
+def CircleCut(size:list, mouse:list):
+    return

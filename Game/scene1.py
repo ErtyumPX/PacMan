@@ -47,13 +47,13 @@ class Scene1(Scene):
         HorizontalSlidingIn(self, 40)
 
     def process_input(self, events, pressed_keys, mouse_pos):
-        if pressed_keys[pygame.K_UP] and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y - 1)] == 1:
+        if (pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_w]) and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y - 1)] == 1:
             self.pacman.velocity = 1
-        if pressed_keys[pygame.K_RIGHT] and TILES[floor(self.pacman.transform.x + 1)][floor(self.pacman.transform.y)] == 1:
+        if (pressed_keys[pygame.K_RIGHT] or pressed_keys[pygame.K_d]) and TILES[floor(self.pacman.transform.x + 1)][floor(self.pacman.transform.y)] == 1:
             self.pacman.velocity = 2
-        if pressed_keys[pygame.K_DOWN] and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y + 1)] == 1:
+        if (pressed_keys[pygame.K_DOWN] or pressed_keys[pygame.K_s]) and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y + 1)] == 1:
             self.pacman.velocity = 3
-        if pressed_keys[pygame.K_LEFT] and TILES[floor(self.pacman.transform.x - 1)][floor(self.pacman.transform.y)] == 1:
+        if (pressed_keys[pygame.K_LEFT] or pressed_keys[pygame.K_a]) and TILES[floor(self.pacman.transform.x - 1)][floor(self.pacman.transform.y)] == 1:
             self.pacman.velocity = 4
 
     def check_if_died(self):
