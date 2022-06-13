@@ -1,5 +1,5 @@
 from scene import Scene
-from game import HorizontalSlidingIn
+from game import HorizontalSlidingIn, HorizontalSlidingOut
 from renderer import RenderManager
 import pygame, defaults, json
 from pacman import Pacman
@@ -12,59 +12,73 @@ from math import floor, ceil
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
 path = "maps/rectangle"
 
-with open(path) as file:
-    data = json.load(file)
-    if isinstance(data, list):
-        TILES = data
+
 
 
 class Scene1(Scene):
-    def __init__(self, main_surface):
+    def __init__(self, main_surface:pygame.Surface, map_path:str="maps/rectangle"):
         super().__init__(main_surface)
+
+        self.TILES = None
+        self.create_map(map_path)
+
         self.surface = main_surface
         self.render_manager = RenderManager(main_surface)
            
         self.enemies = []
+
         self.collected_berry = 0
         self.berries = []
         self.super_berries = []
         self.berry_amount = 0
+
+        self.spawn_position = None
+
         for x in range(defaults.H_TILES):
             for y in range(defaults.V_TILES):
 
-                if TILES[x][y] == 1:
+                if self.TILES[x][y] == 1:
                     self.berry_amount += 1
                     new_berry = Berry(main_surface, x=x, y=y)
                     self.render_manager.add(new_berry)
                     self.berries.append(new_berry)
 
-                elif TILES[x][y] == -1:
+                elif self.TILES[x][y] == -1:
                     self.berry_amount += 1
                     new_super_berry = SuperBerry(main_surface, x=x, y=y)
-                    self.render_manager.add(new_super_berry)
                     self.super_berries.append(new_super_berry)
-                    TILES[x][y] = 1
+                    self.render_manager.add(new_super_berry)
+                    self.TILES[x][y] = 1
 
-                elif TILES[x][y] == -2:
+                elif self.TILES[x][y] == -2:
                     new_enemy = Enemy(main_surface, x=x, y=y, vel=randint(1, 4))
                     self.enemies.append(new_enemy)
                     self.render_manager.add(new_enemy)
+                    self.TILES[x][y] = 1
 
-                elif TILES[x][y] == 0:
-                    self.pacman = Pacman(main_surface, x=x, y=y)
-                    TILES[x][y] = 1
+
+                elif self.TILES[x][y] == 0:
+                    self.pacman = Pacman(main_surface, x=x, y=y, life=1)
                     self.render_manager.add(self.pacman)
+                    self.spawn_position = [x, y]
+                    self.TILES[x][y] = 1
 
-        HorizontalSlidingIn(self, 40)
+        HorizontalSlidingIn(self, 60)
+
+    def create_map(self, path:str):
+        with open(path) as file:
+            data = json.load(file)
+            if isinstance(data, list):
+                self.TILES = data
 
     def process_input(self, events, pressed_keys, mouse_pos):
-        if (pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_w]) and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y - 1)] == 1:
+        if (pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_w]) and self.TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y - 1)] == 1:
             self.pacman.velocity = 1
-        if (pressed_keys[pygame.K_RIGHT] or pressed_keys[pygame.K_d]) and TILES[floor(self.pacman.transform.x + 1)][floor(self.pacman.transform.y)] == 1:
+        if (pressed_keys[pygame.K_RIGHT] or pressed_keys[pygame.K_d]) and self.TILES[floor(self.pacman.transform.x + 1)][floor(self.pacman.transform.y)] == 1:
             self.pacman.velocity = 2
-        if (pressed_keys[pygame.K_DOWN] or pressed_keys[pygame.K_s]) and TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y + 1)] == 1:
+        if (pressed_keys[pygame.K_DOWN] or pressed_keys[pygame.K_s]) and self.TILES[floor(self.pacman.transform.x)][floor(self.pacman.transform.y + 1)] == 1:
             self.pacman.velocity = 3
-        if (pressed_keys[pygame.K_LEFT] or pressed_keys[pygame.K_a]) and TILES[floor(self.pacman.transform.x - 1)][floor(self.pacman.transform.y)] == 1:
+        if (pressed_keys[pygame.K_LEFT] or pressed_keys[pygame.K_a]) and self.TILES[floor(self.pacman.transform.x - 1)][floor(self.pacman.transform.y)] == 1:
             self.pacman.velocity = 4
 
     def check_if_died(self):
@@ -75,11 +89,12 @@ class Scene1(Scene):
                 print(self.pacman.life)
                 if self.pacman.life > 0:
                     self.render_manager.remove(self.pacman)
-                    self.pacman = Pacman(self.surface, x=14, y=13, life=self.pacman.life)
+                    self.pacman = Pacman(self.surface, x=self.spawn_position[0], y=self.spawn_position[1], life=self.pacman.life)
                     self.render_manager.add(self.pacman)
                 else:
                     print("You Died!")
-
+                    HorizontalSlidingOut(self, 60)
+                    self.next_scene = Scene1(self.surface)
 
     def eat_berry(self):
         for berry in self.berries:
@@ -96,9 +111,9 @@ class Scene1(Scene):
             print("You Won!")
 
     def update(self):
-        self.pacman.move(TILES)
+        self.pacman.move(self.TILES)
         for enemy in self.enemies:
-            enemy.move(TILES)
+            enemy.move(self.TILES)
         self.check_if_died()
         self.eat_berry()
         self.check_if_won()
@@ -117,7 +132,7 @@ class Scene1(Scene):
         for x in range(defaults.H_TILES):
             pos[0] += defaults.TILE_WIDTH
             for y in range(defaults.V_TILES):
-                tile = TILES[x][y]
+                tile = self.TILES[x][y]
                 color = (0, 0, 0)
                 if tile == 1:
                     color = defaults.ACTIVE_COLOR

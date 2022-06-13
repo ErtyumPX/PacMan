@@ -25,4 +25,7 @@ ENEMY_IMAGE = None
 BLANK_WHITE_IMAGE = pygame.image.load("data/white.jpg")
 BLANK_BLACK_IMAGE = pygame.image.load("data/black.jpg")
 
+#MAPS
+MAP_ONE = "maps/rectangle"
+
 BLACK_HIGHLIGHT_COLOR = (0, 0, 0, 60)

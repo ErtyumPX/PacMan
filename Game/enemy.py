@@ -39,6 +39,7 @@ class Enemy(pygame.sprite.Sprite):
         if not self.is_moving and self.velocity != 0:
             self.change_direction(tiles)
             next_step = vel_add[self.velocity]
+            
             if tiles[floor(self.transform.x + next_step[0])][floor(self.transform.y + next_step[1])] == 1:
                 next_pos = (self.transform.x + next_step[0], self.transform.y + next_step[1])
                 self.is_moving = True
