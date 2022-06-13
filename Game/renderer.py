@@ -4,18 +4,21 @@ class RenderManager:
 	def __init__(self, surface:pygame.Surface, background_color=None):
 		self.surface = surface
 		self.background_color = background_color
-		self.objects = []
+		self.objects = {}
 
-	def add(self, *args):
-		for obj in args:
-			self.objects.append(obj)
+	def add(self, obj, layer=0):
+		if layer in self.objects.keys():
+			self.objects[layer].append(obj)
+		else:
+			self.objects[layer] = [obj,]
+		self.objects = dict(sorted(self.objects.items()))
 
-	def remove(self, *args):
-		for obj in args:
-			try:
-				self.objects.remove(obj)
-			except Exception as exp:
-				print(exp)
+	def remove(self, obj):
+		for layer in self.objects:
+			for obj_ in layer:
+				if obj == obj_:
+					layer.remove(obj)
+			
 
 	def reset(self):
 		self.objects = []
@@ -23,5 +26,6 @@ class RenderManager:
 	def render(self):
 		if self.background_color is not None:
 			self.surface.fill(self.background_color)
-		for x in self.objects:
-			x.update()
+		for layer in self.objects.values():
+			for obj in layer:
+				obj.update()

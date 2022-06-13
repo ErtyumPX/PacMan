@@ -4,7 +4,7 @@ import defaults
 
 #SCENES
 from menu_scene import Menu
-from scene1 import Scene1
+from game_scene import GameScene
 
 pygame.init()
 

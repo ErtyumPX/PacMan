@@ -5,7 +5,7 @@ from ui_elements import TextButton, ProcessElements
 import pygame, defaults
 
 #next scenes
-from scene1 import Scene1
+from game_scene import GameScene
 
 
 
@@ -27,7 +27,7 @@ class Menu(Scene):
 
     def play(self):
         FadeOut(self, 40)
-        self.next_scene = Scene1(self.surface)
+        self.next_scene = GameScene(self.surface)
     
     def update(self):
         pass

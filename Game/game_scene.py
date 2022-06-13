@@ -10,12 +10,8 @@ from random import randint
 from math import floor, ceil
 
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
-path = "maps/rectangle"
 
-
-
-
-class Scene1(Scene):
+class GameScene(Scene):
     def __init__(self, main_surface:pygame.Surface, map_path:str="maps/rectangle"):
         super().__init__(main_surface)
 
@@ -94,7 +90,7 @@ class Scene1(Scene):
                 else:
                     print("You Died!")
                     HorizontalSlidingOut(self, 60)
-                    self.next_scene = Scene1(self.surface)
+                    self.next_scene = GameScene(self.surface)
 
     def eat_berry(self):
         for berry in self.berries:
