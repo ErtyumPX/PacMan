@@ -20,7 +20,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.active_scene.terminate()
-                    HorizontalSlidingOut(self.active_scene, 40)
+                    FadeOut(self.active_scene, 40)
                 else:
                     filtered_events.append(event)
 

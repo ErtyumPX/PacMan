@@ -1,5 +1,5 @@
 from scene import Scene
-from game import HorizontalSlidingIn, HorizontalSlidingOut
+from game import HorizontalSlidingIn, HorizontalSlidingOut, FadeOut
 from renderer import RenderManager
 import pygame, defaults, json
 from pacman import Pacman
@@ -8,6 +8,7 @@ from berry import Berry
 from super_berry import SuperBerry
 from random import randint
 from math import floor, ceil
+from ui_elements import TextButton, ProcessElements
 
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
 
@@ -59,7 +60,15 @@ class GameScene(Scene):
                     self.spawn_position = [x, y]
                     self.TILES[x][y] = 1
 
+        self.go_back_button = TextButton(main_surface, x=650, y=400, width=100, height=24, text="Back", font_size=12, func=self.go_back)
+        self.BUTTONS = [self.go_back_button,]
+        self.render_manager.add(self.go_back_button, layer=10)
+
         HorizontalSlidingIn(self, 60)
+
+    def go_back(self):
+        FadeOut(self, 40)
+        self.next_scene = defaults.MenuScene(self.surface)
 
     def create_map(self, path:str):
         with open(path) as file:
@@ -76,6 +85,8 @@ class GameScene(Scene):
             self.pacman.velocity = 3
         if (pressed_keys[pygame.K_LEFT] or pressed_keys[pygame.K_a]) and self.TILES[floor(self.pacman.transform.x - 1)][floor(self.pacman.transform.y)] == 1:
             self.pacman.velocity = 4
+
+        ProcessElements(events, pressed_keys, mouse_pos, self.BUTTONS)
 
     def check_if_died(self):
         for enemy in self.enemies:
@@ -124,6 +135,7 @@ class GameScene(Scene):
                 pos[1] += defaults.TILE_WIDTH
             pos[1] = 0
         """
+
         pos = [-defaults.TILE_WIDTH, 0, defaults.TILE_WIDTH, defaults.TILE_WIDTH]
         for x in range(defaults.H_TILES):
             pos[0] += defaults.TILE_WIDTH
@@ -147,5 +159,4 @@ class GameScene(Scene):
                 pygame.draw.rect(self.surface, (255, 255, 255), pos, 1)
                 pos[1] += defaults.TILE_WIDTH
             pos[1] = 0
-
         self.render_manager.render()

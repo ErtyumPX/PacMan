@@ -8,8 +8,8 @@ from ui_elements import TextButton, InputBox, Text, ProcessElements, UpdateEleme
 pygame.init()
 tk.Tk().withdraw()
 
-SIZE = X, Y = 700, 500
-UI_SIZE = UI_X, UI_Y = 100, 0
+SIZE = X, Y = 600, 500
+UI_SIZE = UI_X, UI_Y = 200, 0
 TILE_WIDTH = 20
 H_TILES = int(SIZE[0]/TILE_WIDTH)
 V_TILES = int(SIZE[1]/TILE_WIDTH)
@@ -104,11 +104,9 @@ while main:
                     if main_pacman_position == None:
                         TILES[mouse_tile_x][mouse_tile_y] = 0
                         main_pacman_position = [mouse_tile_x, mouse_tile_y]
-
                     elif mouse_tile_x == main_pacman_position[0] and mouse_tile_y == main_pacman_position[1]:
-                        TILES[mouse_tile_x][mouse_tile_y] = 1
-                        main_pacman_position = None
-
+                            TILES[mouse_tile_x][mouse_tile_y] = 1
+                            main_pacman_position = None
                     else:
                         TILES[main_pacman_position[0]][main_pacman_position[1]] = 1
                         TILES[mouse_tile_x][mouse_tile_y] = 0
@@ -119,12 +117,19 @@ while main:
                         TILES[mouse_tile_x][mouse_tile_y] = 1
                     else:
                         TILES[mouse_tile_x][mouse_tile_y] = -1
+                        if main_pacman_position != None:
+                            if mouse_tile_x == main_pacman_position[0] and mouse_tile_y == main_pacman_position[1]:
+                                    main_pacman_position = None
 
                 elif event.key == pygame.K_e:
                     if TILES[mouse_tile_x][mouse_tile_y] == -2:
                         TILES[mouse_tile_x][mouse_tile_y] = 1
                     else:
                         TILES[mouse_tile_x][mouse_tile_y] = -2
+                        if main_pacman_position != None:
+                            if mouse_tile_x == main_pacman_position[0] and mouse_tile_y == main_pacman_position[1]:
+                                    main_pacman_position = None
+
 
         elif event.type == pygame.KEYUP:
             tile_change_status = None

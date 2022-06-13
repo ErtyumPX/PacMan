@@ -1,13 +1,20 @@
 import pygame
 
+#All Scenes
+from menu_scene import MenuScene
+from game_scene import GameScene
+from map_creater_scene import MapCreaterScene
+from custom_map_scene import CustomMapScene
+
 FRAME_RATE = 120
 
 WINDOW_NAME = "Pacman"
 
-SIZE = 600, 500
+SIZE = 800, 500
+GAME_SIZE = 600, 500
 TILE_WIDTH = 20
-H_TILES = int(SIZE[0]/TILE_WIDTH)
-V_TILES = int(SIZE[1]/TILE_WIDTH)
+H_TILES = int(GAME_SIZE[0]/TILE_WIDTH)
+V_TILES = int(GAME_SIZE[1]/TILE_WIDTH)
 
 ACTIVE_COLOR = (255, 120, 120)
 OBSTACLE_COLOR = (0, 120, 255)
@@ -25,6 +32,8 @@ ENEMY_IMAGE = None
 BLANK_WHITE_IMAGE = pygame.image.load("data/white.jpg")
 BLANK_BLACK_IMAGE = pygame.image.load("data/black.jpg")
 
+MAPS_PATH = "custom_maps/{0}"
+CUSTOM_MAPS_DIR = "custom_maps/*"
 #MAPS
 MAP_ONE = "maps/rectangle"
 

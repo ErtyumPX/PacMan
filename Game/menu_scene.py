@@ -4,20 +4,21 @@ from renderer import RenderManager
 from ui_elements import TextButton, ProcessElements
 import pygame, defaults
 
-#next scenes
-from game_scene import GameScene
 
 
-
-class Menu(Scene):
+class MenuScene(Scene):
     def __init__(self, main_surface):
         super().__init__(main_surface)
         self.surface = main_surface
         self.render_manager = RenderManager(main_surface, background_color=(80, 80, 80))
 
-        play_button = TextButton(main_surface, x=defaults.SIZE[0]/2-50, y=300, width=100, height=40, text="PLAY", func=self.play,color=(255,0,0))
-        self.render_manager.add(play_button)
-        self.BUTTONS = [play_button,]
+        play_button = TextButton(main_surface, x=defaults.SIZE[0]/2-50, y=240, width=100, height=40, text="PLAY", func=self.play, color=(255,0,0))
+        custom_maps_button = TextButton(main_surface, x=defaults.SIZE[0]/2-80, y=300, width=160, height=40, text="CUSTOM MAPS", func=self.custom_maps, color=(255,0,0))
+        map_creater_button = TextButton(main_surface, x=defaults.SIZE[0]/2-85, y=360, width=170, height=40, text="MAP CREATER", func=self.go_to_map_creater, color=(255,0,0))
+        self.BUTTONS = [play_button, custom_maps_button, map_creater_button]
+
+        self.render_manager.add_all(self.BUTTONS)
+
 
         FadeIn(self, 40)
 
@@ -27,7 +28,15 @@ class Menu(Scene):
 
     def play(self):
         FadeOut(self, 40)
-        self.next_scene = GameScene(self.surface)
+        self.next_scene = defaults.GameScene(self.surface)
+
+    def custom_maps(self):
+        FadeOut(self, 40)
+        self.next_scene = defaults.CustomMapScene(self.surface)
+
+    def go_to_map_creater(self):
+        FadeOut(self, 40)
+        self.next_scene = defaults.MapCreaterScene(self.surface)
     
     def update(self):
         pass

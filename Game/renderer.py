@@ -13,6 +13,13 @@ class RenderManager:
 			self.objects[layer] = [obj,]
 		self.objects = dict(sorted(self.objects.items()))
 
+	def add_all(self, objects:list, layer=0):
+		if layer in self.objects.keys():
+			self.objects[layer].extend(objects)
+		else:
+			self.objects[layer] = objects
+		self.objects = dict(sorted(self.objects.items()))
+
 	def remove(self, obj):
 		for layer in self.objects:
 			for obj_ in layer:

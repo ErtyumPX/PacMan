@@ -3,7 +3,7 @@ from game import *
 import defaults
 
 #SCENES
-from menu_scene import Menu
+from menu_scene import MenuScene
 from game_scene import GameScene
 
 pygame.init()
@@ -15,6 +15,6 @@ size = rootX, rootY = defaults.SIZE
 root = pygame.display.set_mode(size)
 pygame.display.set_caption(defaults.WINDOW_NAME)
 
-game = Game(Menu(root), defaults.FRAME_RATE)
+game = Game(MenuScene(root), defaults.FRAME_RATE)
 
 game.run()
