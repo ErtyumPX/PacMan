@@ -16,6 +16,7 @@ class GameScene(Scene):
     def __init__(self, main_surface:pygame.Surface, map_path:str="maps/rectangle"):
         super().__init__(main_surface)
 
+        self.map_path = map_path
         self.TILES = None
         self.create_map(map_path)
 
@@ -101,7 +102,7 @@ class GameScene(Scene):
                 else:
                     print("You Died!")
                     HorizontalSlidingOut(self, 60)
-                    self.next_scene = GameScene(self.surface)
+                    self.next_scene = GameScene(self.surface, self.map_path)
 
     def eat_berry(self):
         for berry in self.berries:
