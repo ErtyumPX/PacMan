@@ -28,7 +28,7 @@ class MenuScene(Scene):
 
     def play(self):
         FadeOut(self, 40)
-        self.next_scene = defaults.GameScene(self.surface)
+        self.next_scene = defaults.LevelsScene(self.surface)
 
     def custom_maps(self):
         FadeOut(self, 40)

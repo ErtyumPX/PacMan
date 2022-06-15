@@ -6,7 +6,8 @@ import pygame, defaults
 from glob import glob
 
 
-class CustomMapScene(Scene):
+
+class LevelsScene(Scene):
     def __init__(self, main_surface):
         super().__init__(main_surface)
         self.surface = main_surface
@@ -16,7 +17,7 @@ class CustomMapScene(Scene):
         self.go_back_button = TextButton(main_surface, x=650, y=400, width=100, height=24, text="Back", font_size=12, func=self.go_back)
         self.BUTTONS = [self.go_back_button,]
 
-        all_maps = glob(defaults.CUSTOM_MAPS_DIR)
+        all_maps = glob(defaults.ALL_LEVELS_DIR)
         for i, map_path in enumerate(all_maps):
             name = map_path.split("\\")[1]
             x = 120 * i + 80

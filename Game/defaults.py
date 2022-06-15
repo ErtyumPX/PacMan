@@ -5,10 +5,11 @@ from menu_scene import MenuScene
 from game_scene import GameScene
 from map_creater_scene import MapCreaterScene
 from custom_map_scene import CustomMapScene
+from levels_scene import LevelsScene
 
 FRAME_RATE = 120
 
-WINDOW_NAME = "Pacman"
+WINDOW_NAME = "PacMan"
 
 SIZE = 800, 500
 GAME_SIZE = 600, 500
@@ -35,6 +36,6 @@ BLANK_BLACK_IMAGE = pygame.image.load("data/black.jpg")
 MAPS_PATH = "custom_maps/{0}"
 CUSTOM_MAPS_DIR = "custom_maps/*"
 #MAPS
-MAP_ONE = "maps/rectangle"
+ALL_LEVELS_DIR = "maps/*"
 
 BLACK_HIGHLIGHT_COLOR = (0, 0, 0, 60)
