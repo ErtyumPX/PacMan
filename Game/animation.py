@@ -20,7 +20,7 @@ class Timer:
 
 
 def bySpeed(object_:object, target_position:tuple, speed:int, frame_rate:int = 120,
-			after_function=empty_function, args=()) -> bool:
+			after_function=empty_function, args=(), kwargs={}) -> bool:
 	"""
 	The object has to have an 'x' and 'y' property
 	Speed is the "frequency", how many pixels to travel in one second.
@@ -51,7 +51,7 @@ def bySpeed(object_:object, target_position:tuple, speed:int, frame_rate:int = 1
 
 	on_action.append(object_)
 
-	task = threading.Thread(target=act, args=(object_, target_position, (x_speed, y_speed), total_frame, frame_rate, after_function, args))
+	task = threading.Thread(target=act, args=(object_, target_position, (x_speed, y_speed), total_frame, frame_rate, after_function, args, kwargs))
 	task.start()
 
 	#return task.join()
@@ -71,7 +71,7 @@ def byDuration(object_:object, target_position:tuple, duration:int, frame_rate:i
 	pass
 
 
-def act(object_:object, target_position:tuple, speed:tuple, total_frame:int, frame_rate:int, after_func, args) -> None:
+def act(object_:object, target_position:tuple, speed:tuple, total_frame:int, frame_rate:int, after_func, args, kwargs) -> None:
 	clock = pygame.time.Clock()
 	frame = 0
 	while frame < total_frame:
@@ -81,7 +81,7 @@ def act(object_:object, target_position:tuple, speed:tuple, total_frame:int, fra
 		frame += 1
 	object_.x, object_.y = target_position[0], target_position[1]
 	on_action.remove(object_)
-	after_func(*args)
+	after_func(*args, **kwargs)
 	#print("Animation finished.")
 
 

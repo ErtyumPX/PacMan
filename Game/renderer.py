@@ -21,7 +21,7 @@ class RenderManager:
 		self.objects = dict(sorted(self.objects.items()))
 
 	def remove(self, obj):
-		for layer in self.objects:
+		for layer in self.objects.values():
 			for obj_ in layer:
 				if obj == obj_:
 					layer.remove(obj)

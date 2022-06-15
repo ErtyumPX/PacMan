@@ -18,6 +18,15 @@ class Enemy(pygame.sprite.Sprite):
         self.moving_speed = 7
         self.possible_choices = [1, 2, 3, 4]
 
+        self.borning_time = time.time()
+        self.new_born = True
+        self.blink_time = defaults.ENEMY_BLINK_TIME
+        self.blink_frequency = 0.5
+        self.blink = False
+
+        self.starting_point = (x, y)
+        self.vulnerable_until = None
+
     def after_function(self):
         self.is_moving = False
         self.find_possible_ways()
@@ -50,4 +59,9 @@ class Enemy(pygame.sprite.Sprite):
         x = self.transform.x * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2
         y = self.transform.y * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2
         r = 7
-        pygame.draw.circle(self.surface, (0, 0, 0), (x, y), r)
+        if self.new_born and self.blink:
+            pygame.draw.circle(self.surface, defaults.ENEMY_BLINKING_COLOR, (x, y), r)
+        elif self.vulnerable_until != None:
+            pygame.draw.circle(self.surface, defaults.ENEMY_VULNERABLE_COLOR, (x, y), r)
+        else:
+            pygame.draw.circle(self.surface, defaults.ENEMY_COLOR, (x, y), r)

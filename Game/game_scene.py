@@ -1,7 +1,7 @@
 from scene import Scene
 from game import HorizontalSlidingIn, HorizontalSlidingOut, FadeOut
 from renderer import RenderManager
-import pygame, defaults, json
+import pygame, defaults, json, time
 from pacman import Pacman
 from enemy import Enemy
 from berry import Berry
@@ -91,28 +91,60 @@ class GameScene(Scene):
 
     def check_if_died(self):
         for enemy in self.enemies:
-            if floor(self.pacman.transform.x) == floor(enemy.transform.x) and \
-                    floor(self.pacman.transform.y) == floor(enemy.transform.y):
-                self.pacman.life -= 1
-                print(self.pacman.life)
-                if self.pacman.life > 0:
-                    self.render_manager.remove(self.pacman)
-                    self.pacman = Pacman(self.surface, x=self.spawn_position[0], y=self.spawn_position[1], life=self.pacman.life)
-                    self.render_manager.add(self.pacman)
-                else:
-                    print("You Died!")
-                    HorizontalSlidingOut(self, 60)
-                    self.next_scene = GameScene(self.surface, self.map_path)
+            if not enemy.new_born:
+                if floor(self.pacman.transform.x) == floor(enemy.transform.x) and floor(self.pacman.transform.y) == floor(enemy.transform.y):                    
+                    if enemy.vulnerable_until != None:
+                        self.enemies.remove(enemy)
+                        self.render_manager.remove(enemy)
+
+                        new_enemy = Enemy(self.surface, x=enemy.starting_point[0], y=enemy.starting_point[1])
+                        self.enemies.append(new_enemy)
+                        self.render_manager.add(new_enemy, layer=3)
+                        del enemy
+                    else:
+                        self.pacman.life -= 1
+                        if self.pacman.life > 0:
+                            self.render_manager.remove(self.pacman)
+                            self.pacman = Pacman(self.surface, x=self.spawn_position[0], y=self.spawn_position[1], life=self.pacman.life)
+                            self.render_manager.add(self.pacman)
+                        else:
+                            print("You Died!")
+                            HorizontalSlidingOut(self, 60)
+                            self.next_scene = GameScene(self.surface, self.map_path)
+
+    def resurrect_enemy(self, old_enemy):
+        self.render_manager.remove(old_enemy)
+        print("New Enemy")
+        new_enemy = Enemy(self.surface, x=old_enemy.starting_point[0], y=old_enemy.starting_point[1], vel=randint(1, 4))
+        self.enemies.append(new_enemy)
+        self.render_manager.add(new_enemy, layer=3)
 
     def eat_berry(self):
         for berry in self.berries:
-            if not berry.is_taken:
-                if berry.transform.x == floor(self.pacman.transform.x) and berry.transform.y == floor(self.pacman.transform.y):
-                    self.collected_berry += 1
-                    berry.is_taken = True
-                elif berry.transform.x == ceil(self.pacman.transform.x) and berry.transform.y == ceil(self.pacman.transform.y):
-                    self.collected_berry += 1
-                    berry.is_taken = True
+            found_berry = False
+            if berry.transform.x == floor(self.pacman.transform.x) and berry.transform.y == floor(self.pacman.transform.y):
+                found_berry = True
+            elif berry.transform.x == ceil(self.pacman.transform.x) and berry.transform.y == ceil(self.pacman.transform.y):
+                found_berry = True
+            if found_berry:
+                self.collected_berry += 1
+                self.berries.remove(berry)
+                self.render_manager.remove(berry)
+
+        for super_berry in self.super_berries:
+            found_berry = False
+            if super_berry.transform.x == floor(self.pacman.transform.x) and super_berry.transform.y == floor(self.pacman.transform.y):
+                found_berry = True
+            elif super_berry.transform.x == ceil(self.pacman.transform.x) and super_berry.transform.y == ceil(self.pacman.transform.y):
+                found_berry = True
+            if found_berry:
+                self.collected_berry += 1
+                self.super_berries.remove(super_berry)
+                self.render_manager.remove(super_berry)
+                for enemy in self.enemies:
+                    enemy.vulnerable_until = time.time() + 8
+
+
 
     def check_if_won(self):
         if self.berry_amount == self.collected_berry:
@@ -121,7 +153,20 @@ class GameScene(Scene):
     def update(self):
         self.pacman.move(self.TILES)
         for enemy in self.enemies:
-            enemy.move(self.TILES)
+            if enemy.new_born:
+                if time.time() - enemy.borning_time > enemy.blink_time:
+                    enemy.new_born = False
+                elif ((time.time() - enemy.borning_time) // enemy.blink_frequency) % 2 == 0:
+                    enemy.blink = True
+                else:
+                    enemy.blink = False
+            else:
+                enemy.move(self.TILES)
+
+            if enemy.vulnerable_until != None:
+                if enemy.vulnerable_until - time.time() < 0:
+                    enemy.vulnerable_until = None
+
         self.check_if_died()
         self.eat_berry()
         self.check_if_won()

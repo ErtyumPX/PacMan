@@ -1,6 +1,7 @@
 import pygame
 from scene import Scene
 
+
 class Game:
     def __init__(self, first_scene:Scene, frame_rate:int):
         assert isinstance(first_scene, Scene)

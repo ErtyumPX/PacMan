@@ -7,11 +7,9 @@ class Berry(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.surface = surface
         self.transform = Transform(x=x, y=y)
-        self.is_taken = False
 
     def update(self):
-        if not self.is_taken:
-            x = int(self.transform.x * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
-            y = int(self.transform.y * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
-            r = 2
-            pygame.draw.circle(self.surface, defaults.BERRY_COLOR, (x, y), r)
+        x = int(self.transform.x * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
+        y = int(self.transform.y * defaults.TILE_WIDTH + defaults.TILE_WIDTH / 2)
+        r = 2
+        pygame.draw.circle(self.surface, defaults.BERRY_COLOR, (x, y), r)

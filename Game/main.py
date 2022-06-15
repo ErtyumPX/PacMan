@@ -1,6 +1,6 @@
 import pygame
 from game import *
-import defaults
+import defaults, time
 
 #SCENES
 from menu_scene import MenuScene
