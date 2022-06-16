@@ -112,12 +112,6 @@ class GameScene(Scene):
                             HorizontalSlidingOut(self, 60)
                             self.next_scene = GameScene(self.surface, self.map_path)
 
-    def resurrect_enemy(self, old_enemy):
-        self.render_manager.remove(old_enemy)
-        print("New Enemy")
-        new_enemy = Enemy(self.surface, x=old_enemy.starting_point[0], y=old_enemy.starting_point[1], vel=randint(1, 4))
-        self.enemies.append(new_enemy)
-        self.render_manager.add(new_enemy, layer=3)
 
     def eat_berry(self):
         for berry in self.berries:
