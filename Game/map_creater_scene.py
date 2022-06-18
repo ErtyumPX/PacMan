@@ -1,4 +1,4 @@
-from game import FadeIn, FadeOut
+from game import FadeIn, FadeOut, CirclerIn
 from scene import Scene
 from renderer import RenderManager
 from ui_elements import TextButton, InputBox, Text, ProcessElements, UpdateElements
@@ -36,7 +36,7 @@ class MapCreaterScene(Scene):
 
 
 
-       	FadeIn(self, 40)
+       	CirclerIn(self, 20)
 
     def clear_tiles(self):
 	    self.TILES.clear()

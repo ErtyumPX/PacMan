@@ -1,6 +1,10 @@
 import pygame
+import numpy as np
 from scene import Scene
+from math import sqrt
+from animation import Timer
 
+timer = Timer()
 
 class Game:
     def __init__(self, first_scene:Scene, frame_rate:int):
@@ -39,8 +43,6 @@ class Game:
 
         # Call last function before shutting down the window
         self.last_function()
-
-
 
 
 
@@ -101,9 +103,52 @@ def HorizontalSlidingOut(scene:Scene, speed:int):
         pygame.time.wait(10)
     pygame.event.clear()
 
-def CirclerOut(scene:Scene , speed:int):
-    return
+
+def CirclerOut(scene:Scene, speed:int, position:tuple, cutting_color = (0, 0, 0, 0)):
+    size = scene.surface.get_size()
+    circle_surface = pygame.Surface(size, pygame.SRCALPHA, 32)
+    radius = max(size[0], size[1]) / 2
+    while radius > 1:
+        scene.render()
+        circle_surface.fill((0, 0, 0, 255))
+        pygame.draw.circle(circle_surface, cutting_color, position, radius)
+        scene.surface.blit(circle_surface, (0, 0))
+        pygame.display.flip()
+        radius -= speed
+        pygame.time.wait(10)
+    pygame.event.clear()
+
+def CirclerIn(scene:Scene, speed:int, position:tuple = None, circle_color = (0, 0, 0, 255)):
+    size = scene.surface.get_size()
+    circle_surface = pygame.Surface(size, pygame.SRCALPHA, 32)
+    radius = max(size[0], size[1]) / 2
+    if not position:
+        position = (size[0] / 2, size[1] / 2)
+    while radius > 1:
+        print(radius)
+        scene.render()
+        circle_surface.fill((0, 0, 0, 0))
+        pygame.draw.circle(circle_surface, circle_color, position, radius)
+        scene.surface.blit(circle_surface, (0, 0))
+        pygame.display.flip()
+        radius -= speed
+        pygame.time.wait(10)
+    pygame.event.clear()
 
 
-def CircleCut(size:list, mouse:list):
-    return
+### Not finished
+def SquareOut(scene:Scene, speed:int, position:tuple, cutting_color = (0, 0, 0, 0)):
+    size = scene.surface.get_size()
+    square_surface = pygame.Surface(size, pygame.SRCALPHA, 32)
+    length = int(max(size[0], size[1]) / 2 - 1)
+    while length > 1:
+        scene.render()
+        square_surface.fill((0, 0, 0, 255))
+        transparent_rect = (position[0] - length / 2, position[1] - length / 2, length, length)
+        pygame.draw.rect(square_surface, cutting_color, transparent_rect)
+        square_surface = pygame.transform.rotate(square_surface, speed)
+        scene.surface.blit(square_surface, (0, 0))
+        pygame.display.flip()
+        length -= speed
+        pygame.time.wait(10)
+    pygame.event.clear()

@@ -1,4 +1,4 @@
-from game import FadeIn, FadeOut
+from game import FadeIn, FadeOut, SquareOut, CirclerOut, HorizontalSlidingOut
 from scene import Scene
 from renderer import RenderManager
 from ui_elements import TextButton, ProcessElements
@@ -27,15 +27,15 @@ class MenuScene(Scene):
         ProcessElements(events, pressed_keys, mouse_pos, self.BUTTONS)
 
     def play(self):
-        FadeOut(self, 40)
+        CirclerOut(self, 30, pygame.mouse.get_pos())
         self.next_scene = defaults.LevelsScene(self.surface)
 
     def custom_maps(self):
-        FadeOut(self, 40)
+        CirclerOut(self, 30, pygame.mouse.get_pos())
         self.next_scene = defaults.CustomMapScene(self.surface)
 
     def go_to_map_creater(self):
-        FadeOut(self, 40)
+        CirclerOut(self, 30, pygame.mouse.get_pos())
         self.next_scene = defaults.MapCreaterScene(self.surface)
     
     def update(self):

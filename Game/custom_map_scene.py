@@ -1,4 +1,4 @@
-from game import FadeIn, FadeOut
+from game import FadeIn, FadeOut, CirclerIn
 from scene import Scene
 from renderer import RenderManager
 from ui_elements import TextButton, ProcessElements, UpdateElements
@@ -24,7 +24,7 @@ class CustomMapScene(Scene):
             custom_map_button = TextButton(main_surface, x=x-50, y=y, width=100, height=60, text=f"{name}", font_size=12, func=self.open_game, args=[map_path,])
             self.BUTTONS.append(custom_map_button)
 
-        FadeIn(self, 40)
+        CirclerIn(self, 20)
 
 
     def process_input(self, events, pressed_keys, mouse_pos):

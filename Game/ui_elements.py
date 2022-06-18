@@ -217,4 +217,3 @@ def UpdateElements(elements:list = [], inputs:list = [], texts:list = []):
 		input_.update()
 	for text_ in texts:
 		text_.update()
-
