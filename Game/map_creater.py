@@ -68,8 +68,6 @@ INPUT_BOXES = [name_input, ]
 TEXTS = []
 
 
-
-
 main = True
 while main:
     clock.tick(120)

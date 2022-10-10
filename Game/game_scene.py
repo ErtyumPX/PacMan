@@ -155,7 +155,7 @@ class GameScene(Scene):
                 else:
                     enemy.blink = False
             else:
-                enemy.move(self.TILES)
+                enemy.move(self.TILES, self.pacman.transform.position, inverted=(vulnerable_until != None) )
 
             if enemy.vulnerable_until != None:
                 if enemy.vulnerable_until - time.time() < 0:

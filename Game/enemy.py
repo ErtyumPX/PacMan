@@ -1,8 +1,9 @@
 import pygame, defaults, time
 from transform import Transform
-from random import randint, choice
-from math import floor
+from random import randint, choice, random
+from math import floor, sqrt
 from animation import bySpeed
+from copy import deepcopy
 
 vel_add = {1: (0, -1), 2: (1, 0), 3: (0, 1), 4: (-1, 0)}
 
@@ -34,19 +35,50 @@ class Enemy(pygame.sprite.Sprite):
     def find_possible_ways(self):
         possible_choices = [1, 2, 3, 4]
         possible_choices.remove(self.velocity)
+        #prevent them to turn back
         k = (self.velocity + 1) % 4 + 1
         possible_choices.remove(k)
         self.possible_choices = possible_choices
 
-    def change_direction(self, tiles):
-        v = choice(self.possible_choices)
-        next_step = vel_add[v]
-        if tiles[floor(self.transform.x + next_step[0])][floor(self.transform.y + next_step[1])] == 1:
-            self.velocity = v
+    def closest_way_to_the_pacman(self, pacman_position:tuple, possibility:float=40, inverted:bool=false) -> int:
+        '''
+        possibility -> The possibility of choosing the closest way to the pacman, out of 100
 
-    def move(self, tiles):
+        inverted -> If a super berry has been eaten soon, the possibility computation will 
+        be inverted, so the enemy will try to find the furthest position from the pacman
+        '''
+        the_closest_distance = None
+        the_closest_direction = None
+        for direction in self.possible_choices:
+            next_position = (floor(self.transform.x + vel_add[direction][0]), floor(self.transform.y + vel_add[direction][1]))
+            distance = sqrt( (pacman_position[0] - next_position[0])**2 + (pacman_position[1] - next_position[1])**2 )
+            if not the_closest_distance:   
+                the_closest_distance = distance
+                the_closest_direction = direction
+            else:
+                if distance < the_closest_distance:
+                    the_closest_distance = distance
+                    the_closest_direction = direction
+        if random()*100 > possibility:
+            if len(self.possible_choices) != 1:
+                current_possible_choices = deepcopy(self.possible_choices)
+                current_possible_choices.remove(the_closest_direction)
+                return choice(current_possible_choices)
+        return the_closest_direction
+
+
+
+
+    def change_direction(self, tiles, pacman_position:tuple, possibility:float=40, inverted:bool=false):
+        #direction = choice(self.possible_choices)
+        direction = self.closest_way_to_the_pacman(pacman_position, possibility=possibility, inverted=inverted)
+        next_step = vel_add[direction]
+        if tiles[floor(self.transform.x + next_step[0])][floor(self.transform.y + next_step[1])] == 1:
+            self.velocity = direction
+
+    def move(self, tiles, pacman_position:tuple, possibility:float=40, inverted:bool=false):
         if not self.is_moving and self.velocity != 0:
-            self.change_direction(tiles)
+            self.change_direction(tiles, pacman_position, possibility=possibility, inverted=inverted)
             next_step = vel_add[self.velocity]
             
             if tiles[floor(self.transform.x + next_step[0])][floor(self.transform.y + next_step[1])] == 1:
