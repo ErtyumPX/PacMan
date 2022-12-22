@@ -4,9 +4,12 @@ The good old PacMan game simulated with PyGame and Tkinter.
 
 ## Game
 
-With it's own little chance-based pathfinding system for enemies
+### Game's Itself
 
 <img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/pacman_game.JPG" width=50% height=50%>
+
+### Map Creater for the Game
+
 <img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/pacman_map_creater.JPG" width=50% height=50%>
 
 
