@@ -2,6 +2,7 @@
  
 The good old PacMan game simulated with PyGame and Tkinter.
 
+
 ### Game's Itself
 
 <img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/pacman_game.JPG" width=50% height=50%>
@@ -9,6 +10,10 @@ The good old PacMan game simulated with PyGame and Tkinter.
 ### Map Creater for the Game
 
 <img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/pacman_map_creater.JPG" width=50% height=50%>
+
+### SuperBerry that Allowes You to Consume Enemies
+
+<img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/superberry.JPG" width=5% height=5%>
 
 
 ## Algorithms
