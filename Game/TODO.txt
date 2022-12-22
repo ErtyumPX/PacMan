@@ -1,0 +1,24 @@
+### PACMAN TO DO LIST
+
+
+# To Do
+- Enemy Pathfinding Fix (enemy.py)
+- Maps Overlisting Fix (levels_scene.py and custam_maps_scene.py)
+- Add Level 1
+- Add Level 2
+- Add Level 3
+- Add Sound Efects (game_scene.py)
+- Map Creater Tiny Teny Instructions (map_creater_scene.py)
+
+
+
+# Done
+
+
+
+
+# Ideas
+- Square In/Out Scene Transitions
+
+
+
