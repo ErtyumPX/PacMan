@@ -13,7 +13,7 @@ The good old PacMan game simulated with PyGame and Tkinter.
 
 ### SuperBerry that Allowes You to Consume Enemies
 
-<img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/superberry.JPG" width=5% height=5%>
+<img src="https://github.com/ErtyumPX/PacMan/blob/main/Images/superberry.JPG" width=15% height=15%>
 
 
 ## Algorithms
