@@ -23,3 +23,7 @@ The algorithms used:
 ### Pathfinding
 
 Little pathfinding for enemies, by simply check which squeare that they will move next is closer to the PacMan by pixels, an choosing the closest one with a 60 percent of chance; only if our little Pacman is not on superberry effect and able to consume them...
+
+### Threading
+
+Threading was used to make the animation for movement of the Pacman and enemies smoother and more accurate.
