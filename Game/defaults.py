@@ -1,4 +1,5 @@
 import pygame
+from sys import platform
 
 #All Scenes
 from menu_scene import MenuScene
@@ -6,6 +7,13 @@ from game_scene import GameScene
 from map_creater_scene import MapCreaterScene
 from custom_map_scene import CustomMapScene
 from levels_scene import LevelsScene
+
+if platform == "linux" or platform == "linux2":
+    PATH_SEPERATOR = "/"
+elif platform == "win32":
+    PATH_SEPERATOR = "//"
+else: # not supported
+    raise Exception("FATAL: operating System is not supported!")
 
 FRAME_RATE = 120
 

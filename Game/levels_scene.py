@@ -19,7 +19,7 @@ class LevelsScene(Scene):
 
         all_maps = glob(defaults.ALL_LEVELS_DIR)
         for i, map_path in enumerate(all_maps):
-            name = map_path.split("\\")[1]
+            name = map_path.split(defaults.PATH_SEPERATOR)[1]
             x = 120 * i + 80
             y = 100
             custom_map_button = TextButton(main_surface, x=x-50, y=y, width=100, height=60, text=f"{name}", font_size=12, func=self.open_game, args=[map_path,])
